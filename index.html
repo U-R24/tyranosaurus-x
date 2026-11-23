@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>3D T-Rex Viewer</title>
+  <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js"></script>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background: radial-gradient(circle at center, #262b36 0%, #111318 100%);
+      color: #ffffff;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    header {
+      position: absolute;
+      top: 20px;
+      left: 24px;
+      z-index: 10;
+      pointer-events: none;
+    }
+    header h1 {
+      font-size: 1.4rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+    header p {
+      font-size: 0.85rem;
+      color: #a0aec0;
+      margin-top: 4px;
+    }
+    model-viewer {
+      width: 100%;
+      height: 100%;
+      --poster-color: transparent;
+    }
+    .controls {
+      position: absolute;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 10px;
+      z-index: 10;
+      background: rgba(17, 19, 24, 0.75);
+      backdrop-filter: blur(8px);
+      padding: 10px 16px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    button {
+      background: #2d3748;
+      color: #fff;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    button:hover {
+      background: #4a5568;
+    }
+    button.active {
+      background: #3182ce;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>T-Rex 3D Model</h1>
+    <p>Klik & geser untuk memutar • Scroll untuk zoom</p>
+  </header>
+
+  <model-viewer
+    id="viewer"
+    src="./trex.glb"
+    alt="Model 3D T-Rex"
+    auto-rotate
+    camera-controls
+    shadow-intensity="1.2"
+    exposure="1"
+    environment-image="neutral"
+    ar
+    ar-modes="webxr scene-viewer quick-look">
+  </model-viewer>
+
+  <div class="controls">
+    <button id="toggleRotate" class="active">Auto-Rotate: ON</button>
+    <button id="resetCamera">Reset Kamera</button>
+  </div>
+
+  <script>
+    const viewer = document.getElementById('viewer');
+    const toggleRotateBtn = document.getElementById('toggleRotate');
+    const resetCameraBtn = document.getElementById('resetCamera');
+
+    toggleRotateBtn.addEventListener('click', () => {
+      if (viewer.hasAttribute('auto-rotate')) {
+        viewer.removeAttribute('auto-rotate');
+        toggleRotateBtn.textContent = 'Auto-Rotate: OFF';
+        toggleRotateBtn.classList.remove('active');
+      } else {
+        viewer.setAttribute('auto-rotate', '');
+        toggleRotateBtn.textContent = 'Auto-Rotate: ON';
+        toggleRotateBtn.classList.add('active');
+      }
+    });
+
+    resetCameraBtn.addEventListener('click', () => {
+      viewer.cameraOrbit = 'auto auto auto';
+      viewer.cameraTarget = 'auto auto auto';
+      viewer.fieldOfView = 'auto';
+    });
+  </script>
+
+</body>
+</html>
